@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>موسوعتي الرقمية</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --accent-color: #38bdf8;
+            --text-color: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-radius: 12px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            color: var(--accent-color);
+            font-size: 2.2rem;
+            margin-bottom: 8px;
+        }
+
+        header p {
+            color: var(--text-muted);
+        }
+
+        /* عناصر التحكم: البحث والتصفية */
+        .controls {
+            max-width: 900px;
+            margin: 0 auto 30px auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .search-box {
+            width: 100%;
+            max-width: 500px;
+            padding: 12px 20px;
+            border-radius: 25px;
+            border: 1px solid #334155;
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .search-box:focus {
+            border-color: var(--accent-color);
+        }
+
+        .categories {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .category-btn {
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            border: 1px solid #334155;
+            padding: 8px 18px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .category-btn:hover, .category-btn.active {
+            background-color: var(--accent-color);
+            color: #0f172a;
+            font-weight: bold;
+        }
+
+        /* شبكة عرض بطاقات الفيديوهات */
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .video-card {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            border: 1px solid #334155;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .video-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* نسبة 16:9 */
+            height: 0;
+            overflow: hidden;
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+
+        .card-content {
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .video-tag {
+            align-self: flex-start;
+            background-color: rgba(56, 189, 248, 0.15);
+            color: var(--accent-color);
+            font-size: 0.8rem;
+            padding: 3px 10px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+        }
+
+        .video-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .video-desc {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+            flex-grow: 1;
+        }
+
+        .external-link {
+            display: inline-block;
+            font-size: 0.85rem;
+            color: var(--accent-color);
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .external-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>موسوعتي الرقمية للفيديوهات</h1>
+        <p>أرشيف متكامل لروابط الدروس والمواضيع المختارة</p>
+    </header>
+
+    <div class="controls">
+        <input type="text" id="searchInput" class="search-box" placeholder="ابحث في الموسوعة عن أي موضوع...">
+        
+        <div class="categories">
+            <button class="category-btn active" onclick="filterCategory('all', event)">الكل</button>
+            <button class="category-btn" onclick="filterCategory('cyber', event)">الأمن السيبراني</button>
+            <button class="category-btn" onclick="filterCategory('tourism', event)">السياحة والاستقبال</button>
+            <button class="category-btn" onclick="filterCategory('ocean', event)">الصيد البحري</button>
+            <button class="category-btn" onclick="filterCategory('marketing', event)">التسويق و SEO</button>
+            <button class="category-btn" onclick="filterCategory('logistics', event)">حركة السلع واللوجستيات</button>
+        </div>
+    </div>
+
+    <main class="video-grid" id="videoGrid">
+
+        <!-- 1. الأمن السيبراني الحديث -->
+        <article class="video-card" data-category="cyber">
+            <div class="video-container">
+                <iframe src="https://www.youtube.com/embed/inWWhr5tnEA" title="الأمن السيبراني الحديث" allowfullscreen></iframe>
+            </div>
+            <div class="card-content">
+                <span class="video-tag">الأمن السيبراني</span>
+                <h2 class="video-title">الأمن السيبراني الحديث</h2>
+                <p class="video-desc">شرح مفاهيم الحماية الرقمية والتعامل مع التهديدات المتقدمة في البنية التحتية.</p>
+                <a href="https://www.aljazeera.net/encyclopedia/2024/9/19/%D8%A7%D9%84%D8%A3%D9%85%D9%86-%D8%A7%D9%84%D8%B3%D9%8A%D8%A8%D8%B1%D8%A7%D9%86%D9%8A-%D9%85%D9%81%D9%87%D9%88%D9%85%D9%87-%D9%88%D8%AA%D8%A7%D8%B1%D9%8A%D8%AE%D9%87" target="_blank" class="external-link">قراءة المقال المرجعي ←</a>
+            </div>
+        </article>
+
+        <!-- 2. الاستقبال في المؤسسات السياحية -->
+        <article class="video-card" data-category="tourism">
+            <div class="video-container">
+                <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="الاستقبال في المؤسسات السياحية" allowfullscreen></iframe>
+            </div>
+            <div class="card-content">
+                <span class="video-tag">السياحة والاستقبال</span>
+                <h2 class="video-title">مكتب الاستقبال وإدارة الخدمات الفندقية</h2>
+                <p class="video-desc">مهارات إدارة مكاتب الاستقبال (Front Office) وتوفير أفضل تجربة للعملاء في المؤسسات السياحية.</p>
+                <a href="https://dspace.univ-ouargla.dz/jspui/handle/123456789/33703" target="_blank" class="external-link">قراءة الدراسة المرتبطة ←</a>
+            </div>
+        </article>
+
+        <!-- 3. الصيد في المحيط -->
+        <article class="video-card" data-category="ocean">
+            <div class="video-container">
+                <iframe src="https://www.youtube.com/embed/EjExVR4Pdg0" title="الصيد في المحيط" allowfullscreen></iframe>
+            </div>
+            <div class="card-content">
+                <span class="video-tag">الصيد البحري</span>
+                <h2 class="video-title">تقنيات الصيد في المحيط والمياه العميقة</h2>
+                <p class="video-desc">استعراض لأساليب التتبع والعدات المستخدمة للصيد في عرض البحر والمحيطات.</p>
+                <a href="https://hudhudshop.com/blog/-81" target="_blank" class="external-link">دليل طرق الصيد ←</a>
+            </div>
+        </article>
+
+        <!-- 4. دروس التسويق وتحسين محركات البحث -->
+        <article class="video-card" data-category="marketing">
+            <div class="video-container">
+                <iframe src="https://www.youtube.com/embed/xsVTmrz00q4" title="دروس التسويق و SEO" allowfullscreen></iframe>
+            </div>
+            <div class="card-content">
+                <span class="video-tag">التسويق و SEO</span>
+                <h2 class="video-title">أساسيات التسويق الرقمي و SEO</h2>
+                <p class="video-desc">كيفية تصدر محركات البحث وجلب الزيارات وتنمية المشاريع الرقمية عبر الإنترنت.</p>
+                <a href="https://developers.google.com/search/docs/fundamentals/seo-starter-guide?hl=ar" target="_blank" class="external-link">دليل جوجل الرسمي للـ SEO ←</a>
+            </div>
+        </article>
+
+        <!-- 5. حركة السلع في العالم -->
+        <article class="video-card" data-category="logistics">
+            <div class="video-container">
+                <iframe src="https://www.youtube.com/embed/8vX0w9z05Z8" title="حركة السلع في العالم" allowfullscreen></iframe>
+            </div>
+            <div class="card-content">
+                <span class="video-tag">حركة السلع واللوجستيات</span>
+                <h2 class="video-title">سلاسل الإمداد وحركة التجارة العالمية</h2>
+                <p class="video-desc">كيف تتم إدارة حركة البضائع والسلع من المصانع والموانئ حول العالم وصولاً للمستهلك النهائي.</p>
+                <a href="https://bakkah.com/ar/knowledge-center/%D9%85%D8%A7-%D9%87%D9%8A-%D8%A5%D8%AF%D8%A7%D8%B1%D8%A9-%D8%B3%D9%84%D8%A7%D8%B3%D9%84-%D8%A7%D9%84%D8%A5%D9%85%D8%AF%D8%A7%D8%AF-scm" target="_blank" class="external-link">مقال تفصيلي عن سلاسل الإمداد ←</a>
+            </div>
+        </article>
+
+    </main>
+
+    <script>
+        // محرك البحث الفوري
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const cards = document.querySelectorAll('.video-card');
+
+            cards.forEach(card => {
+                const title = card.querySelector('.video-title').textContent.toLowerCase();
+                const desc = card.querySelector('.video-desc').textContent.toLowerCase();
+                const tag = card.querySelector('.video-tag').textContent.toLowerCase();
+
+                if (title.includes(searchTerm) || desc.includes(searchTerm) || tag.includes(searchTerm)) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+
+        // تصفية الفيديوهات حسب القسم
+        function filterCategory(category, evt) {
+            const cards = document.querySelectorAll('.video-card');
+            const buttons = document.querySelectorAll('.category-btn');
+
+            buttons.forEach(btn => btn.classList.remove('active'));
+            evt.target.classList.add('active');
+
+            cards.forEach(card => {
+                if (category === 'all' || card.getAttribute('data-category') === category) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</body>
+</html>
